@@ -1,10 +1,14 @@
-FROM docker:20.10.18-dind
+FROM docker:23.0.6-dind
 
 ENV EDGE_MAIN http://dl-cdn.alpinelinux.org/alpine/edge/main
 ENV EDGE_COMMUNITY http://dl-cdn.alpinelinux.org/alpine/edge/community
 
-RUN apk update --repository=$EDGE_MAIN --repository=$EDGE_COMMUNITY \
-	&& apk --no-cache add \
+RUN apk update \
+    --repository=$EDGE_MAIN \
+    --repository=$EDGE_COMMUNITY
+
+RUN apk --no-cache add \
+    bash \
     git \
     curl \
     make \
@@ -33,8 +37,7 @@ RUN apk update --repository=$EDGE_MAIN --repository=$EDGE_COMMUNITY \
     lftp \
     rsync \
     --repository=$EDGE_MAIN \
-    --repository=$EDGE_COMMUNITY \
-	&& pip3 --no-cache-dir install --upgrade pip \
-	&& pip3 --no-cache-dir install docker-compose==1.25.4 \
-	&& rm -f /var/cache/apk/* \
+    --repository=$EDGE_COMMUNITY
+
+RUN rm -f /var/cache/apk/* \
 	&& rm -rf /root/.cache
